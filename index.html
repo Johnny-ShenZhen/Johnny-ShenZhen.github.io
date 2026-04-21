@@ -76,6 +76,42 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
+        /* Navigation Bar */
+        .navbar {
+            position: sticky;
+            top: 0;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 12px 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            color: #1a3a6b;
+            text-decoration: none;
+            font-size: 1em;
+            font-weight: 500;
+            padding: 6px 0;
+            transition: color 0.3s, border-bottom 0.3s;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            color: #ffd966;
+            border-bottom-color: #ffd966;
+        }
+
         /* Container */
         .container {
             max-width: 1000px;
@@ -170,6 +206,7 @@
             padding: 30px;
             margin-bottom: 30px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            scroll-margin-top: 70px;
         }
 
         .section h2 {
@@ -241,10 +278,26 @@
             margin-bottom: 6px;
         }
 
+        .citation-count {
+            display: inline-block;
+            background: #e8f0fe;
+            color: #1a3a6b;
+            font-size: 0.75em;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-top: 6px;
+            font-style: normal;
+        }
+
+        .citation-count i {
+            margin-right: 4px;
+        }
+
         .pub-links {
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .pub-links a {
@@ -262,11 +315,11 @@
             color: white;
         }
 
-        /* Research Context Gallery */
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+        /* Research Context Gallery - Vertical Layout */
+        .gallery-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
             margin-top: 20px;
         }
 
@@ -279,13 +332,13 @@
         }
 
         .gallery-item:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
 
         .gallery-item img {
             width: 100%;
-            height: 200px;
+            height: 300px;
             object-fit: cover;
             display: block;
         }
@@ -361,6 +414,21 @@
             color: #1a3a6b;
         }
 
+        /* Loading indicator */
+        .loading {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #e9ecef;
+            border-top-color: #1a3a6b;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         /* Footer */
         .footer {
             text-align: center;
@@ -391,8 +459,16 @@
                 padding: 22px;
             }
 
-            .gallery {
-                grid-template-columns: 1fr;
+            .nav-container {
+                gap: 15px;
+            }
+            
+            .nav-link {
+                font-size: 0.85em;
+            }
+
+            .gallery-item img {
+                height: 200px;
             }
         }
     </style>
@@ -414,11 +490,22 @@
         </div>
     </div>
 
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="nav-container">
+            <a href="#about" class="nav-link">About Me</a>
+            <a href="#research-context" class="nav-link">Research Context</a>
+            <a href="#education" class="nav-link">Education</a>
+            <a href="#publications" class="nav-link">Publications</a>
+            <a href="#skills" class="nav-link">Skills</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </div>
+    </div>
+
     <div class="container">
-        <!-- Profile -->
-        <div class="profile-card">
+        <!-- Profile / About Me -->
+        <div id="about" class="profile-card">
             <div class="profile-image">
-                <!-- 请替换为您的个人照片URL -->
                 <img src="https://via.placeholder.com/150x150?text=Zhen+Shen" alt="Zhen Shen">
                 <div class="social-icons">
                     <a href="#"><i class="ai ai-google-scholar"></i></a>
@@ -433,12 +520,12 @@
                 
                 <div class="metrics">
                     <div class="metric-item">
-                        <div class="metric-value">4</div>
-                        <div class="metric-label">Publications</div>
+                        <div class="metric-value" id="total-citations">—</div>
+                        <div class="metric-label">Total Citations</div>
                     </div>
                     <div class="metric-item">
-                        <div class="metric-value">—</div>
-                        <div class="metric-label">Citations</div>
+                        <div class="metric-value" id="total-pubs">4</div>
+                        <div class="metric-label">Publications</div>
                     </div>
                     <div class="metric-item">
                         <div class="metric-value">2026</div>
@@ -448,8 +535,8 @@
             </div>
         </div>
 
-        <!-- Research Context Section with Zizhu Park Images -->
-        <div class="section">
+        <!-- Research Context Section with Zizhu Park Images - Vertical Layout -->
+        <div id="research-context" class="section">
             <h2><i class="fas fa-building"></i> Research Context</h2>
             <div class="research-context-intro">
                 <i class="fas fa-map-marker-alt" style="color: #1a3a6b; margin-right: 8px;"></i> 
@@ -457,7 +544,7 @@
                 home to over 6,100 enterprises and 150,000 technology professionals. It serves as the empirical foundation for Studies 1 and 2 of my dissertation, 
                 where I investigate how stakeholders perceive park attributes and how symbiotic partnerships between park management and tenant firms drive innovation and value creation.
             </div>
-            <div class="gallery">
+            <div class="gallery-vertical">
                 <div class="gallery-item">
                     <img src="https://en.zizhupark.com/upload/file/file20191216193957.jpg" alt="Shanghai Zizhu Science Park View 1">
                     <div class="gallery-caption">
@@ -483,7 +570,7 @@
         </div>
 
         <!-- Education -->
-        <div class="section">
+        <div id="education" class="section">
             <h2><i class="fas fa-graduation-cap"></i> Education</h2>
             <div class="education-item">
                 <div class="education-degree">Ph.D. in Real Estate Finance and Economics</div>
@@ -493,55 +580,59 @@
             </div>
             <div class="education-item">
                 <div class="education-degree">Master of Public Administration (MPA)</div>
-                <div>University of Southern California <span class="education-date">| 2006</span></div>
+                <div>University of Southern California <span class="education-date">| 2004 – 2006</span></div>
             </div>
             <div class="education-item">
                 <div class="education-degree">Bachelor of Arts</div>
-                <div>University of California, Riverside <span class="education-date">| 2004</span></div>
+                <div>University of California, Riverside <span class="education-date">| 2000 – 2004</span></div>
             </div>
         </div>
 
         <!-- Publications -->
-        <div class="section">
+        <div id="publications" class="section">
             <h2><i class="fas fa-file-alt"></i> Publications</h2>
             
             <div class="subsection-title">First-Author Publications</div>
             
-            <div class="publication">
+            <div class="publication" data-doi="10.24867/IJIEM-374">
                 <div class="pub-title">Beyond the landlords: Exploring perceptual attributes and benefits of science parks from an ecosystem perspective</div>
                 <div class="pub-authors"><strong>Zhen Shen</strong>, Nikola Zivlak, Danijela Ćirić Lalić, Kelvin Y. Dong, Guanghua Han</div>
                 <div class="pub-venue"><strong>International Journal of Industrial Engineering and Management</strong>, Vol. 16, No. 2, pp. 113–123, 2025</div>
                 <div class="pub-links">
                     <a href="https://doi.org/10.24867/IJIEM-374" target="_blank"><i class="fas fa-external-link-alt"></i> https://doi.org/10.24867/IJIEM-374</a>
+                    <span class="citation-count" id="citation-1"><i class="fas fa-quote-left"></i> <span class="citation-num">—</span> citations</span>
                 </div>
             </div>
 
-            <div class="publication">
+            <div class="publication" data-doi="10.17559/TV-20251106003112">
                 <div class="pub-title">Beyond Location: Antecedents, Intensity, and Outcomes of Symbiotic Partnerships between Science Parks and Tenant Firms</div>
                 <div class="pub-authors"><strong>Zhen Shen</strong>, Nikola Zivlak, Danijela Ciric Lalic, Hailan Guo, Yanting Chen</div>
                 <div class="pub-venue"><strong>Tehnički vjesnik / Technical Gazette</strong>, Vol. 33, No. 4, 2026 (Accepted for publication)</div>
                 <div class="pub-links">
                     <a href="https://doi.org/10.17559/TV-20251106003112" target="_blank"><i class="fas fa-external-link-alt"></i> https://doi.org/10.17559/TV-20251106003112</a>
+                    <span class="citation-count" id="citation-2"><i class="fas fa-quote-left"></i> <span class="citation-num">—</span> citations</span>
                 </div>
             </div>
 
             <div class="subsection-title" style="margin-top: 30px;">Second-Author Publications</div>
 
-            <div class="publication">
+            <div class="publication" data-doi="10.1109/TEM.2025.3639355">
                 <div class="pub-title">The Impact of Supply Chain Risk Complexity and Concentration on Financial and ESG Performance in China's Semiconductor Industry</div>
                 <div class="pub-authors">Hailan Guo, <strong>Zhen Shen</strong>, Haokun Chen, Mian Dong, Kelvin Y. Dong</div>
                 <div class="pub-venue"><strong>IEEE Transactions on Engineering Management</strong>, Vol. 73, pp. 390–401, 2026</div>
                 <div class="pub-links">
                     <a href="https://doi.org/10.1109/TEM.2025.3639355" target="_blank"><i class="fas fa-external-link-alt"></i> https://doi.org/10.1109/TEM.2025.3639355</a>
+                    <span class="citation-count" id="citation-3"><i class="fas fa-quote-left"></i> <span class="citation-num">—</span> citations</span>
                 </div>
             </div>
 
-            <div class="publication">
+            <div class="publication" data-doi="10.1016/j.ijpe.2025.109524">
                 <div class="pub-title">Analyzing the impact of government R&D subsidy and digital transformation on supply chain risk dynamics management and firm performance in the China's chip industry</div>
                 <div class="pub-authors">Hailan Guo, <strong>Zhen Shen</strong>, Yanting Chen, Mian Dong</div>
                 <div class="pub-venue"><strong>International Journal of Production Economics</strong>, Vol. 281, 109524, 2025</div>
                 <div class="pub-links">
                     <a href="https://doi.org/10.1016/j.ijpe.2025.109524" target="_blank"><i class="fas fa-external-link-alt"></i> https://doi.org/10.1016/j.ijpe.2025.109524</a>
+                    <span class="citation-count" id="citation-4"><i class="fas fa-quote-left"></i> <span class="citation-num">—</span> citations</span>
                 </div>
             </div>
             
@@ -553,7 +644,7 @@
         </div>
 
         <!-- Technical Skills -->
-        <div class="section">
+        <div id="skills" class="section">
             <h2><i class="fas fa-laptop-code"></i> Technical Skills</h2>
             <div class="skills">
                 <span class="skill-tag">Structural Equation Modeling (SEM)</span>
@@ -570,12 +661,12 @@
         </div>
 
         <!-- Contact -->
-        <div class="section">
+        <div id="contact" class="section">
             <h2><i class="fas fa-envelope"></i> Contact</h2>
             <div class="contact-info">
                 <div class="contact-item">
                     <i class="fas fa-envelope"></i>
-                    <a href="mailto:zshen@hku.hk">@hku.hk</a>
+                    <a href="mailto:zshen@hku.hk">zshen@hku.hk</a>
                 </div>
                 <div class="contact-item">
                     <i class="fab fa-github"></i>
@@ -603,5 +694,90 @@
             <i class="fas fa-code"></i> Built with HTML/CSS | Hosted on GitHub Pages
         </p>
     </div>
+
+    <!-- Smooth scroll behavior + Citation fetching -->
+    <script>
+        // ========== 平滑滚动功能 ==========
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // ========== 引用数自动查询功能 ==========
+        // 论文DOI列表
+        const papers = [
+            { doi: "10.24867/IJIEM-374", elementId: "citation-1" },
+            { doi: "10.17559/TV-20251106003112", elementId: "citation-2" },
+            { doi: "10.1109/TEM.2025.3639355", elementId: "citation-3" },
+            { doi: "10.1016/j.ijpe.2025.109524", elementId: "citation-4" }
+        ];
+
+        // 备用引用数据（当API失败时使用）
+        const fallbackCitations = {
+            "10.24867/IJIEM-374": 5,
+            "10.17559/TV-20251106003112": 0,
+            "10.1109/TEM.2025.3639355": 0,
+            "10.1016/j.ijpe.2025.109524": 4
+        };
+
+        // 更新单个论文的引用数
+        async function fetchCitationCount(paper) {
+            const citationSpan = document.getElementById(paper.elementId);
+            if (!citationSpan) return 0;
+            
+            const numSpan = citationSpan.querySelector('.citation-num');
+            if (!numSpan) return 0;
+            
+            try {
+                // 使用Semantic Scholar API
+                const url = `https://api.semanticscholar.org/graph/v1/paper/DOI:${paper.doi}?fields=citationCount`;
+                const response = await fetch(url);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const count = data.citationCount || 0;
+                    numSpan.textContent = count;
+                    return count;
+                } else {
+                    const fallback = fallbackCitations[paper.doi] || 0;
+                    numSpan.textContent = fallback;
+                    return fallback;
+                }
+            } catch (error) {
+                console.warn(`Failed to fetch citation for ${paper.doi}:`, error);
+                const fallback = fallbackCitations[paper.doi] || 0;
+                numSpan.textContent = fallback;
+                return fallback;
+            }
+        }
+
+        // 更新总引用数
+        async function updateAllCitations() {
+            let total = 0;
+            const promises = papers.map(paper => fetchCitationCount(paper));
+            const results = await Promise.all(promises);
+            results.forEach(count => { total += count; });
+            
+            const totalElement = document.getElementById('total-citations');
+            if (totalElement) {
+                totalElement.textContent = total;
+            }
+            return total;
+        }
+
+        // 页面加载时自动执行
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAllCitations();
+        });
+    </script>
 </body>
 </html>
